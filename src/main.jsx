@@ -3,7 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import routes from './router';
-import './assets/scss/main.scss'
+import './assets/scss/main.scss';
+import { FirebaseProvider } from './services/firebaseServices';
 
 function App() {
   return (
@@ -30,4 +31,8 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(root).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <FirebaseProvider>
+    <App />
+  </FirebaseProvider>
+);

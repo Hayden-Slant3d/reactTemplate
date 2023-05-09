@@ -1,11 +1,11 @@
 // routes.js
 import React from 'react';
-import Test from './Pages/Test';
+import Example from './pages/Example';
 
 const routes = [
   {
     path: '/',
-    element: <Test />,
+    element: <Example />,
     exact: true,
   },
   // {
