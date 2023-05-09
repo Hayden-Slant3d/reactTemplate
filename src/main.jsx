@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import routes from './router';
 import './assets/scss/main.scss';
-import { FirebaseProvider } from './services/firebaseServices';
+import { FirebaseProvider } from './services/firebaseContext';
 
 function App() {
   return (

@@ -1,38 +1,44 @@
 // FirebaseContext.js
-import React, { createContext } from 'react';
 import { db, auth } from '../firebase';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
-const FirebaseContext = createContext();
-function FirebaseProvider({ children }) {
-  const value = { db, auth };
+class FirebaseInstance {
+  constructor(data) {
+    this.collectionName = data.collectionName;
+    this.documentId = data.documentId;
+  }
 
-  return (
-    <FirebaseContext.Provider value={value}>
-      {children}
-    </FirebaseContext.Provider>
-  );
-}
+  getDocRef() {
+    return doc(db, this.collectionName, this.documentId);
+  }
 
-class FirebaseApi {
-  async getData(collectionName, documentId) {
-    const docRef = doc(db, collectionName, documentId);
-    const res = await getDoc(docRef);
-  
-    if (res.exists()) {
-      console.log("Document data:", res.data());
-      return res.data();
-    } else {
-      console.log("No such document!");
-      return null;
-    }
+  async get(){
+      const docRef = this.getDocRef();
+      const res = (await getDoc(docRef)).data();
+      if(res == undefined) throw new Error('Document can not be found! Please check your document { name & id }');
+      return res
   }
 
 
+  async setData(data) {
+    const docRef = this.getDocRef();
+    await setDoc(docRef, data);
+    console.log("Document successfully written!");
+  }
+
+  async updateData(data) {
+    const docRef = this.getDocRef();
+    await updateDoc(docRef, data);
+    console.log("Document successfully updated!");
+  }
+
+  async deleteData() {
+    const docRef = this.getDocRef();
+    await deleteDoc(docRef);
+    console.log("Document successfully deleted!");
+  }
 }
 
-const firebaseApi = new FirebaseApi()
+const firebaseApi = new FirebaseInstance({ collectionName: 'myCollection', documentId: 'Doc1' });
 
-
-
-export { FirebaseProvider, firebaseApi };
+export { firebaseApi };
