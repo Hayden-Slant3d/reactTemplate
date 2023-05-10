@@ -7,7 +7,8 @@ function Example() {
 
   async function test(){
     try {
-      const res = await firebaseApi.get()
+      const res = await firebaseApi.read()
+      await firebaseApi.write({ [test[0]]: 5 });
       console.log(res)
     } catch (error) {
       console.error(error)

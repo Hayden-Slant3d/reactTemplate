@@ -12,28 +12,36 @@ class FirebaseInstance {
     return doc(db, this.collectionName, this.documentId);
   }
 
-  async get(){
+  async checkDoc(){
+    docRef = this.getDocRef()
+    const res = (await getDoc(docRef)).data();
+    if(res == undefined) throw new Error('Document can not be found! Please check your document { name & id }');
+    return res
+  }
+
+  async read(){
       const docRef = this.getDocRef();
-      const res = (await getDoc(docRef)).data();
-      if(res == undefined) throw new Error('Document can not be found! Please check your document { name & id }');
+      const res = await this.checkDoc(docRef)
       return res
   }
 
-
   async setData(data) {
     const docRef = this.getDocRef();
+    await this.checkDoc(docRef)
     await setDoc(docRef, data);
     console.log("Document successfully written!");
   }
 
-  async updateData(data) {
+  async write(data) {
     const docRef = this.getDocRef();
+    await this.checkDoc(docRef)
     await updateDoc(docRef, data);
     console.log("Document successfully updated!");
   }
 
-  async deleteData() {
+  async delete() {
     const docRef = this.getDocRef();
+    await this.checkDoc(docRef)
     await deleteDoc(docRef);
     console.log("Document successfully deleted!");
   }
