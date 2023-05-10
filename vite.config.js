@@ -7,5 +7,8 @@ export default defineConfig({
     loader: 'jsx',
     include: /\.jsx?$/,
   },
+  server: {
+    port: 8080
+  },
   plugins: [react()],
 })
