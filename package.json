@@ -1,7 +1,6 @@
 {
   "name": "react-template",
   "author": "Hayden Liles",
-  "repository": "https://github.com/Hayden-Liles/reactTemplate",
   "description": "A React Template with the MVCS pattern and firebase for backend",
   "version": "1.0.0",
   "type": "module",
