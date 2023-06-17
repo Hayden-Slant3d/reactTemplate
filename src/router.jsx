@@ -1,9 +1,10 @@
-import Example from './pages/Example';
+import LoginScreen from './pages/LoginScreen';
+import ExamplePageWrapper from './pages/LoginScreen';
 
 const routes = [
   {
     path: '/',
-    element: <Example />,
+    element: <LoginScreen />,
     exact: true,
   },
   // {
