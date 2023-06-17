@@ -1,27 +1,50 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { firebaseApi } from "../services/firebaseServices";
 
 function Example() {
-  const [count, setCount] = useState(0);
 
-  async function test(){
-    try {
-      const res = await firebaseApi.read()
-      await firebaseApi.write({ [test[0]]: 5 });
-      console.log(res)
-    } catch (error) {
-      console.error(error)
+  async function initializePokemonData() {
+    const pokemonData = [
+      {
+        id: 'pikachu',
+        name: 'Pikachu',
+        type: 'Electric',
+        moves: ['Quick Attack', 'Electro Ball', 'Thunder Shock', 'Iron Tail']
+      },
+      {
+        id: 'bulbasaur',
+        name: 'Bulbasaur',
+        type: 'Grass/Poison',
+        moves: ['Tackle', 'Vine Whip', 'Razor Leaf', 'Solar Beam']
+      },
+      // Continue for the other Pokémon
+    ];
+
+    // Create a new document for each Pokémon
+    for (const pokemon of pokemonData) {
+      try {
+        await firebaseApi.createData('pokemon', pokemon.id, pokemon);
+        console.log('Data created successfully.');
+      } catch (error) {
+        console.error('Error creating data: ', error);
+      }
     }
-    
   }
 
-  test()
+  async function getPokemon() {
+    const newPokemon = {
+      id: 'charmander',
+      name: 'Charmander',
+      type: 'Fire',
+      moves: ['Quick Attack', 'Electro Ball', 'Thunder Shock', 'Iron Tail']
+    }
+    firebaseApi.createDoc('pokemon', newPokemon.id, newPokemon)
+  }
+
+  getPokemon()
 
   return (
     <div>
-      {/* <h2>Data from Firebase</h2>
-      <ul>{data && Object.entries(data).map(([key, value]) => <li key={key}>{value.name}</li>)}</ul> */}
+      hi
     </div>
   );
 }

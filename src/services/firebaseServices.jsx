@@ -1,52 +1,68 @@
-// FirebaseContext.js
-import { db, auth } from '../firebase';
-import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
-class FirebaseInstance {
-  constructor(data) {
-    this.collectionName = data.collectionName;
-    this.documentId = data.documentId;
+class FirebaseApi {
+
+  // Create
+  createDoc = async (collectionPath, docId, data) => {
+    try {
+      await setDoc(doc(db, collectionPath, docId), data);
+      console.log("Document successfully written!");
+    } catch (e) {
+      console.error("Error writing document: ", e);
+    }
   }
 
-  getDocRef() {
-    return doc(db, this.collectionName, this.documentId);
+  // Read
+  readDoc = async (collectionPath, docId) => {
+    const docRef = doc(db, collectionPath, docId);
+
+    try {
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        return docSnap.data();
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    } catch (e) {
+      console.error("Error getting document:", e);
+    }
   }
 
-  async checkDoc(){
-    docRef = this.getDocRef()
-    const res = (await getDoc(docRef)).data();
-    if(res == undefined) throw new Error('Document can not be found! Please check your document { name & id }');
-    return res
+  // Update
+  updateDoc = async (collectionPath, docId, data) => {
+    try {
+      await updateDoc(doc(db, collectionPath, docId), data);
+      console.log("Document successfully updated!");
+    } catch (e) {
+      console.error("Error updating document: ", e);
+    }
   }
 
-  async read(){
-      const docRef = this.getDocRef();
-      const res = await this.checkDoc(docRef)
-      return res
+  // Delete
+  deleteDoc = async (collectionPath, docId) => {
+    try {
+      await deleteDoc(doc(db, collectionPath, docId));
+      console.log("Document successfully deleted!");
+    } catch (e) {
+      console.error("Error removing document: ", e);
+    }
   }
 
-  async setData(data) {
-    const docRef = this.getDocRef();
-    await this.checkDoc(docRef)
-    await setDoc(docRef, data);
-    console.log("Document successfully written!");
+  readCollection = async (collectionPath) => {
+    const collectionRef = collection(db, collectionPath);
+    const collectionSnap = await getDocs(collectionRef);
+
+    const data = collectionSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return data;
   }
 
-  async write(data) {
-    const docRef = this.getDocRef();
-    await this.checkDoc(docRef)
-    await updateDoc(docRef, data);
-    console.log("Document successfully updated!");
-  }
 
-  async delete() {
-    const docRef = this.getDocRef();
-    await this.checkDoc(docRef)
-    await deleteDoc(docRef);
-    console.log("Document successfully deleted!");
-  }
+
 }
 
-const firebaseApi = new FirebaseInstance({ collectionName: 'myCollection', documentId: 'Doc1' });
 
-export { firebaseApi };
+export const firebaseApi = new FirebaseApi();

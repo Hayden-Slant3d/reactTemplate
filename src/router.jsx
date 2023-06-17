@@ -1,5 +1,3 @@
-// routes.js
-import React from 'react';
 import Example from './pages/Example';
 
 const routes = [
