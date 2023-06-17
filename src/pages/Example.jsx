@@ -16,10 +16,8 @@ function Example() {
         type: 'Grass/Poison',
         moves: ['Tackle', 'Vine Whip', 'Razor Leaf', 'Solar Beam']
       },
-      // Continue for the other Pokémon
     ];
 
-    // Create a new document for each Pokémon
     for (const pokemon of pokemonData) {
       try {
         await firebaseApi.createData('pokemon', pokemon.id, pokemon);
